@@ -1,0 +1,42 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:             serviceair
+# Required-Start:       $ALL
+# Required-Stop:        
+# Should-Start:
+# Should-Stop:
+# X-Interactive:        true
+# Default-Start:        2 3 5
+# Default-Stop:         
+# Short-Description:    Service AIR
+# Description:          Service AIR
+### END INIT INFO
+case "$1" in
+
+	start)
+        sleep 10
+		sudo /home/pi/air/air.py &
+		sudo /home/pi/air/douchette.py &
+        sudo /home/pi/air/connection.py &
+		exit 0
+		;;
+	stop)
+		sudo killall `ps aux | grep connection.py | awk -F ' ' '{print $11}'`
+		sudo killall `ps aux | grep air.py | awk -F ' ' '{print $11}'`
+        sudo killall `ps aux | grep douchette.py | awk -F ' ' '{print $11}'`
+		sudo killall `ps aux | grep hcitool2 | awk -F ' ' '{print $11}'` 
+		exit 0
+		;;
+	status)
+		exit 0
+		;;
+	reload|restart)
+		$0 stop
+		$0 start
+		;;
+	*)
+		echo "Usage: $0 start|stop|status|restart|reload"
+		exit 1
+esac
+exit 1
+
